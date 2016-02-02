@@ -97,9 +97,11 @@
 #include "contiki-net.h"
 #include "net/ip/resolv.h"
 #include <stdbool.h>
-#define DEBUG DEBUG_PRINT
+//#define DEBUG DEBUG_PRINT
+#define DEBUG DEBUG_NONE
 #include "net/ip/uip-debug.h"
 #include <math.h>
+#include <sensors.h>
 
 /*---------------------------------------------------------------------------*/
 #define CC26XX_DEMO_LOOP_INTERVAL       (CLOCK_SECOND * 4)
@@ -109,8 +111,8 @@
 /*---------------------------------------------------------------------------*/
 #define CC26XX_DEMO_SENSOR_NONE         (void *)0xFFFFFFFF
 
-#define CC26XX_DEMO_SENSOR_1     &button_left_sensor
-#define CC26XX_DEMO_SENSOR_2     &button_right_sensor
+//#define CC26XX_DEMO_SENSOR_1     &button_left_sensor
+//#define CC26XX_DEMO_SENSOR_2     &button_right_sensor
 #define BOARD_SENSORTAG		1
 
 #define CC26XX_DEMO_SENSOR_3     CC26XX_DEMO_SENSOR_NONE
@@ -127,8 +129,6 @@ static char node_idx = 0;
 static struct uip_udp_conn *client_conn;
 static double compAngleX, compAngleY;
 static clock_time_t time_stamp = 0;
-
-#define DEBUG 0
 
 /*---------------------------------------------------------------------------*/
 PROCESS(cc26xx_demo_process, "cc26xx demo process");
@@ -166,7 +166,7 @@ get_mpu_reading()
   int value;
   char val_str[32] = {0};
   double accX, accY, accZ;
-  double gyroXRate, gyroYRate, gyroZRate,
+  double gyroXRate, gyroYRate,
          pitch, roll;
   double dt;
 
@@ -191,7 +191,6 @@ get_mpu_reading()
 #endif
 
   value = mpu_9250_sensor.value(MPU_9250_SENSOR_TYPE_GYRO_Z);
-  gyroZRate = (double)value / 100.0;
 #if DEBUG
   printf("MPU Gyro: Z=");
   print_mpu_reading(value, val_str);
@@ -281,17 +280,6 @@ init_mpu_reading(void *not_used)
   mpu_9250_sensor.configure(SENSORS_ACTIVE, MPU_9250_SENSOR_TYPE_ALL);
 }
 
-static void
-tcpip_handler(void)
-{
-  char *str;
-
-  if(uip_newdata()) {
-    str = uip_appdata;
-    str[uip_datalen()] = '\0';
-    printf("Response from the server: '%s'\n", str);
-  }
-}
 /*---------------------------------------------------------------------------*/
 static void
 send_message(void)

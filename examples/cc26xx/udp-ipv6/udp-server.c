@@ -56,8 +56,8 @@ AUTOSTART_PROCESSES(&resolv_process,&udp_server_process);
 static void
 tcpip_handler(void)
 {
-  static int seq_id;
-  char buf[MAX_PAYLOAD_LEN];
+//  static int seq_id;
+//  char buf[MAX_PAYLOAD_LEN];
 
   if(uip_newdata()) {
     ((char *)uip_appdata)[uip_datalen()] = 0;
