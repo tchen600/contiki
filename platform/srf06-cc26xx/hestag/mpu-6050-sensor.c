@@ -33,12 +33,12 @@
  * @{
  *
  * \file
- *  Driver for the Sensortag-CC26XX Invensense MPU9250 motion processing unit
+ *  Driver for the Sensortag-CC26XX Invensense MPU6050 motion processing unit
  */
 /*---------------------------------------------------------------------------*/
 #include "contiki-conf.h"
 #include "lib/sensors.h"
-#include "mpu-9250-sensor.h"
+#include "mpu-6050-sensor.h"
 #include "sys/rtimer.h"
 #include "sensor-common.h"
 #include "board-i2c.h"
@@ -217,7 +217,7 @@ static uint8_t interrupt_status;
 #define SENSOR_STATE_ENABLED      2
 
 static int state = SENSOR_STATE_DISABLED;
-static int elements = MPU_9250_SENSOR_TYPE_NONE;
+static int elements = MPU_6050_SENSOR_TYPE_NONE;
 /*---------------------------------------------------------------------------*/
 /* 3 16-byte words for all sensor readings */
 #define SENSOR_DATA_BUF_SIZE   3
@@ -486,18 +486,18 @@ static void
 notify_ready(void *not_used)
 {
   state = SENSOR_STATE_ENABLED;
-  sensors_changed(&mpu_9250_sensor);
+  sensors_changed(&mpu_6050_sensor);
 }
 /*---------------------------------------------------------------------------*/
 static void
 initialise(void *not_used)
 {
   /* Configure the accelerometer range */
-  if((elements & MPU_9250_SENSOR_TYPE_ACC) != 0) {
-    acc_set_range(MPU_9250_SENSOR_ACC_RANGE);
+  if((elements & MPU_6050_SENSOR_TYPE_ACC) != 0) {
+    acc_set_range(MPU_6050_SENSOR_ACC_RANGE);
   }
 
-  enable_sensor(elements & MPU_9250_SENSOR_TYPE_ALL);
+  enable_sensor(elements & MPU_6050_SENSOR_TYPE_ALL);
 
   ctimer_set(&startup_timer, SENSOR_STARTUP_DELAY, notify_ready, NULL);
 }
@@ -513,7 +513,7 @@ power_up(void)
 /*---------------------------------------------------------------------------*/
 /**
  * \brief Returns a reading from the sensor
- * \param type MPU_9250_SENSOR_TYPE_ACC_[XYZ] or MPU_9250_SENSOR_TYPE_GYRO_[XYZ]
+ * \param type MPU_6050_SENSOR_TYPE_ACC_[XYZ] or MPU_6050_SENSOR_TYPE_GYRO_[XYZ]
  * \return centi-G (ACC) or centi-Deg/Sec (Gyro)
  */
 static int
@@ -529,7 +529,7 @@ value(int type)
 
   memset(sensor_value, 0, sizeof(sensor_value));
 
-  if((type & MPU_9250_SENSOR_TYPE_ACC) != 0) {
+  if((type & MPU_6050_SENSOR_TYPE_ACC) != 0) {
     t0 = RTIMER_NOW();
 
     while(!int_status() &&
@@ -545,15 +545,15 @@ value(int type)
            sensor_value[0], sensor_value[1], sensor_value[2]);
 
     /* Convert */
-    if(type == MPU_9250_SENSOR_TYPE_ACC_X) {
+    if(type == MPU_6050_SENSOR_TYPE_ACC_X) {
       converted_val = acc_convert(sensor_value[0]);
-    } else if(type == MPU_9250_SENSOR_TYPE_ACC_Y) {
+    } else if(type == MPU_6050_SENSOR_TYPE_ACC_Y) {
       converted_val = acc_convert(sensor_value[1]);
-    } else if(type == MPU_9250_SENSOR_TYPE_ACC_Z) {
+    } else if(type == MPU_6050_SENSOR_TYPE_ACC_Z) {
       converted_val = acc_convert(sensor_value[2]);
     }
     rv = (int)(converted_val * 100);
-  } else if((type & MPU_9250_SENSOR_TYPE_GYRO) != 0) {
+  } else if((type & MPU_6050_SENSOR_TYPE_GYRO) != 0) {
     t0 = RTIMER_NOW();
 
     while(!int_status() &&
@@ -568,11 +568,11 @@ value(int type)
     PRINTF("MPU: Gyro = 0x%04x 0x%04x 0x%04x = ",
            sensor_value[0], sensor_value[1], sensor_value[2]);
 
-    if(type == MPU_9250_SENSOR_TYPE_GYRO_X) {
+    if(type == MPU_6050_SENSOR_TYPE_GYRO_X) {
       converted_val = gyro_convert(sensor_value[0]);
-    } else if(type == MPU_9250_SENSOR_TYPE_GYRO_Y) {
+    } else if(type == MPU_6050_SENSOR_TYPE_GYRO_Y) {
       converted_val = gyro_convert(sensor_value[1]);
-    } else if(type == MPU_9250_SENSOR_TYPE_GYRO_Z) {
+    } else if(type == MPU_6050_SENSOR_TYPE_GYRO_Z) {
       converted_val = gyro_convert(sensor_value[2]);
     }
     rv = (int)(converted_val * 100);
@@ -587,7 +587,7 @@ value(int type)
 }
 /*---------------------------------------------------------------------------*/
 /**
- * \brief Configuration function for the MPU9250 sensor.
+ * \brief Configuration function for the MPU6050 sensor.
  *
  * \param type Activate, enable or disable the sensor. See below
  * \param enable
@@ -609,13 +609,13 @@ configure(int type, int enable)
     ti_lib_ioc_io_drv_strength_set(BOARD_IOID_MPU_POWER, IOC_CURRENT_4MA,
                                    IOC_STRENGTH_MAX);
     ti_lib_gpio_pin_clear(BOARD_MPU_POWER);
-    elements = MPU_9250_SENSOR_TYPE_NONE;
+    elements = MPU_6050_SENSOR_TYPE_NONE;
     break;
   case SENSORS_ACTIVE:
-    if(((enable & MPU_9250_SENSOR_TYPE_ACC) != 0) ||
-       ((enable & MPU_9250_SENSOR_TYPE_GYRO) != 0)) {
+    if(((enable & MPU_6050_SENSOR_TYPE_ACC) != 0) ||
+       ((enable & MPU_6050_SENSOR_TYPE_GYRO) != 0)) {
       PRINTF("MPU: Enabling\n");
-      elements = enable & MPU_9250_SENSOR_TYPE_ALL;
+      elements = enable & MPU_6050_SENSOR_TYPE_ALL;
 
       power_up();
 
@@ -624,7 +624,7 @@ configure(int type, int enable)
       PRINTF("MPU: Disabling\n");
       if(HWREG(GPIO_BASE + GPIO_O_DOUT31_0) & BOARD_MPU_POWER) {
         /* Then check our state */
-        elements = MPU_9250_SENSOR_TYPE_NONE;
+        elements = MPU_6050_SENSOR_TYPE_NONE;
         ctimer_stop(&startup_timer);
         sensor_sleep();
         while(ti_lib_i2c_master_busy(I2C0_BASE));
@@ -658,6 +658,6 @@ status(int type)
   return SENSOR_STATE_DISABLED;
 }
 /*---------------------------------------------------------------------------*/
-SENSORS_SENSOR(mpu_9250_sensor, "MPU9250", value, configure, status);
+SENSORS_SENSOR(mpu_6050_sensor, "MPU6050", value, configure, status);
 /*---------------------------------------------------------------------------*/
 /** @} */

@@ -38,11 +38,11 @@
 /*---------------------------------------------------------------------------*/
 #include "contiki.h"
 #include "sensors.h"
-#include "hestag/mpu-9250-sensor.h"
+#include "hestag/mpu-6050-sensor.h"
 
 #include <string.h>
 /*---------------------------------------------------------------------------*/
 /** \brief Exports a global symbol to be used by the sensor API */
-SENSORS(&mpu_9250_sensor);
+SENSORS(&mpu_6050_sensor);
 /*---------------------------------------------------------------------------*/
 /** @} */

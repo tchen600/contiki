@@ -30,6 +30,8 @@
 *.srf06-cc26xx
 *.ev-aducrf101mkxz
 *.report
+*.xml
+
 summary
 *.summary
 *.runerr

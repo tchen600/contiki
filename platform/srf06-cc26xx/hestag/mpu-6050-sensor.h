@@ -34,17 +34,17 @@
  *
  * \defgroup sensortag-cc26xx-mpu SensorTag 2.0 Motion Processing Unit
  *
- * Driver for the Invensense MPU9250 Motion Processing Unit.
+ * Driver for the Invensense MPU6050 Motion Processing Unit.
  *
  * Due to the time required between triggering a reading and the reading
  * becoming available, this driver is meant to be used in an asynchronous
  * fashion. The caller must first activate the sensor by calling
- * mpu_9250_sensor.configure(SENSORS_ACTIVE, xyz);
+ * mpu_6050_sensor.configure(SENSORS_ACTIVE, xyz);
  * The value for the xyz arguments depends on the required readings. If the
  * caller intends to read both the accelerometer as well as the gyro then
- * xyz should be MPU_9250_SENSOR_TYPE_ALL. If the caller only needs to take a
+ * xyz should be MPU_6050_SENSOR_TYPE_ALL. If the caller only needs to take a
  * reading from one of the two elements, xyz should be one of
- * MPU_9250_SENSOR_TYPE_ACC or MPU_9250_SENSOR_TYPE_GYRO
+ * MPU_6050_SENSOR_TYPE_ACC or MPU_6050_SENSOR_TYPE_GYRO
  *
  * Calling .configure() will power up the sensor and initialise it. When the
  * sensor is ready to provide readings, the driver will generate a
@@ -62,47 +62,47 @@
  * @{
  *
  * \file
- * Header file for the Sensortag-CC26XX Invensense MPU9250 motion processing unit
+ * Header file for the Sensortag-CC26XX Invensense MPU6050 motion processing unit
  */
 /*---------------------------------------------------------------------------*/
-#ifndef MPU_9250_SENSOR_H_
-#define MPU_9250_SENSOR_H_
+#ifndef MPU_6050_SENSOR_H_
+#define MPU_6050_SENSOR_H_
 /*---------------------------------------------------------------------------*/
 /* ACC / Gyro Axes */
-#define MPU_9250_SENSOR_TYPE_GYRO_Z   0x01
-#define MPU_9250_SENSOR_TYPE_GYRO_Y   0x02
-#define MPU_9250_SENSOR_TYPE_GYRO_X   0x04
-#define MPU_9250_SENSOR_TYPE_GYRO_ALL 0x07
+#define MPU_6050_SENSOR_TYPE_GYRO_Z   0x01
+#define MPU_6050_SENSOR_TYPE_GYRO_Y   0x02
+#define MPU_6050_SENSOR_TYPE_GYRO_X   0x04
+#define MPU_6050_SENSOR_TYPE_GYRO_ALL 0x07
 
-#define MPU_9250_SENSOR_TYPE_ACC_Z    0x08
-#define MPU_9250_SENSOR_TYPE_ACC_Y    0x10
-#define MPU_9250_SENSOR_TYPE_ACC_X    0x20
-#define MPU_9250_SENSOR_TYPE_ACC_ALL  0x38
+#define MPU_6050_SENSOR_TYPE_ACC_Z    0x08
+#define MPU_6050_SENSOR_TYPE_ACC_Y    0x10
+#define MPU_6050_SENSOR_TYPE_ACC_X    0x20
+#define MPU_6050_SENSOR_TYPE_ACC_ALL  0x38
 
-#define MPU_9250_SENSOR_TYPE_MASK     0x3F
-#define MPU_9250_SENSOR_TYPE_ACC      0x38
-#define MPU_9250_SENSOR_TYPE_GYRO     0x07
+#define MPU_6050_SENSOR_TYPE_MASK     0x3F
+#define MPU_6050_SENSOR_TYPE_ACC      0x38
+#define MPU_6050_SENSOR_TYPE_GYRO     0x07
 
-#define MPU_9250_SENSOR_TYPE_NONE        0
-#define MPU_9250_SENSOR_TYPE_ALL      (MPU_9250_SENSOR_TYPE_ACC | \
-                                       MPU_9250_SENSOR_TYPE_GYRO)
+#define MPU_6050_SENSOR_TYPE_NONE        0
+#define MPU_6050_SENSOR_TYPE_ALL      (MPU_6050_SENSOR_TYPE_ACC | \
+                                       MPU_6050_SENSOR_TYPE_GYRO)
 /*---------------------------------------------------------------------------*/
 /* Accelerometer range */
-#define MPU_9250_SENSOR_ACC_RANGE_2G     0
-#define MPU_9250_SENSOR_ACC_RANGE_4G     1
-#define MPU_9250_SENSOR_ACC_RANGE_8G     2
-#define MPU_9250_SENSOR_ACC_RANGE_16G    3
+#define MPU_6050_SENSOR_ACC_RANGE_2G     0
+#define MPU_6050_SENSOR_ACC_RANGE_4G     1
+#define MPU_6050_SENSOR_ACC_RANGE_8G     2
+#define MPU_6050_SENSOR_ACC_RANGE_16G    3
 /*---------------------------------------------------------------------------*/
 /* Accelerometer range configuration */
-#ifdef MPU_9250_SENSOR_CONF_ACC_RANGE
-#define MPU_9250_SENSOR_ACC_RANGE MPU_9250_SENSOR_CONF_ACC_RANGE
+#ifdef MPU_6050_SENSOR_CONF_ACC_RANGE
+#define MPU_6050_SENSOR_ACC_RANGE MPU_6050_SENSOR_CONF_ACC_RANGE
 #else
-#define MPU_9250_SENSOR_ACC_RANGE MPU_9250_SENSOR_ACC_RANGE_2G
+#define MPU_6050_SENSOR_ACC_RANGE MPU_6050_SENSOR_ACC_RANGE_2G
 #endif
 /*---------------------------------------------------------------------------*/
-extern const struct sensors_sensor mpu_9250_sensor;
+extern const struct sensors_sensor mpu_6050_sensor;
 /*---------------------------------------------------------------------------*/
-#endif /* MPU_9250_SENSOR_H_ */
+#endif /* MPU_6050_SENSOR_H_ */
 /*---------------------------------------------------------------------------*/
 /**
  * @}

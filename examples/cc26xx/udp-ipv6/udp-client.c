@@ -172,7 +172,7 @@ get_mpu_reading()
 
   clock_time_t next = SENSOR_READING_PERIOD;
 
-  value = mpu_9250_sensor.value(MPU_9250_SENSOR_TYPE_GYRO_X);
+  value = mpu_6050_sensor.value(MPU_6050_SENSOR_TYPE_GYRO_X);
   gyroXRate = (double)value / 100.0;
 #if DEBUG
   printf("MPU Gyro: X=");
@@ -181,7 +181,7 @@ get_mpu_reading()
   strcat(tx_str, val_str);  
 #endif
 
-  value = mpu_9250_sensor.value(MPU_9250_SENSOR_TYPE_GYRO_Y);
+  value = mpu_6050_sensor.value(MPU_6050_SENSOR_TYPE_GYRO_Y);
   gyroYRate = (double)value / 100.0;
 #if DEBUG
   printf("MPU Gyro: Y=");
@@ -190,7 +190,7 @@ get_mpu_reading()
   strcat(tx_str, val_str);  
 #endif
 
-  value = mpu_9250_sensor.value(MPU_9250_SENSOR_TYPE_GYRO_Z);
+  value = mpu_6050_sensor.value(MPU_6050_SENSOR_TYPE_GYRO_Z);
 #if DEBUG
   printf("MPU Gyro: Z=");
   print_mpu_reading(value, val_str);
@@ -198,7 +198,7 @@ get_mpu_reading()
   strcat(tx_str, val_str);  
 #endif
 
-  value = mpu_9250_sensor.value(MPU_9250_SENSOR_TYPE_ACC_X);
+  value = mpu_6050_sensor.value(MPU_6050_SENSOR_TYPE_ACC_X);
   accX = value; //actually, should be value / 100.0
 #if DEBUG
   printf("MPU Acc: X=");
@@ -207,7 +207,7 @@ get_mpu_reading()
   strcat(tx_str, val_str);
 #endif
 
-  value = mpu_9250_sensor.value(MPU_9250_SENSOR_TYPE_ACC_Y);
+  value = mpu_6050_sensor.value(MPU_6050_SENSOR_TYPE_ACC_Y);
   accY = value;
 #if DEBUG
   printf("MPU Acc: Y=");
@@ -216,7 +216,7 @@ get_mpu_reading()
   strcat(tx_str, val_str);  
 #endif
 
-  value = mpu_9250_sensor.value(MPU_9250_SENSOR_TYPE_ACC_Z);
+  value = mpu_6050_sensor.value(MPU_6050_SENSOR_TYPE_ACC_Z);
   accZ = value;
 #if DEBUG
   printf("MPU Acc: Z=");
@@ -268,7 +268,7 @@ get_mpu_reading()
      strcat(tx_str, val_str);
   }
 
-//  SENSORS_DEACTIVATE(mpu_9250_sensor);
+//  SENSORS_DEACTIVATE(mpu_6050_sensor);
 
   ctimer_set(&mpu_timer, next, init_mpu_reading, NULL);
 }
@@ -277,7 +277,7 @@ get_mpu_reading()
 static void
 init_mpu_reading(void *not_used)
 {
-  mpu_9250_sensor.configure(SENSORS_ACTIVE, MPU_9250_SENSOR_TYPE_ALL);
+  mpu_6050_sensor.configure(SENSORS_ACTIVE, MPU_6050_SENSOR_TYPE_ALL);
 }
 
 /*---------------------------------------------------------------------------*/
@@ -368,7 +368,7 @@ node_idx = 0; // hard code to 0 for now
         etimer_set(&et, CC26XX_DEMO_LOOP_INTERVAL);
       }
     } else if(ev == sensors_event) {
-	if(ev == sensors_event && data == &mpu_9250_sensor) {
+	if(ev == sensors_event && data == &mpu_6050_sensor) {
 		//which node reports
 		sprintf(tx_str, "%d,", node_idx);
 		get_mpu_reading();

@@ -74,7 +74,7 @@ shutdown_handler(uint8_t mode)
 //    SENSORS_DEACTIVATE(opt_3001_sensor);
 //    SENSORS_DEACTIVATE(tmp_007_sensor);
 //    SENSORS_DEACTIVATE(hdc_1000_sensor);
-    SENSORS_DEACTIVATE(mpu_9250_sensor);
+    SENSORS_DEACTIVATE(mpu_6050_sensor);
     ti_lib_gpio_pin_clear(BOARD_MPU_POWER);
   }
 
@@ -89,7 +89,7 @@ shutdown_handler(uint8_t mode)
  * wake up so we can turn power domains back on for I2C and SSI, and to make
  * sure everything on the board is off before CM3 shutdown.
  */
-LPM_MODULE(sensortag_module, NULL, shutdown_handler, lpm_wakeup_handler,
+LPM_MODULE(hestag_module, NULL, shutdown_handler, lpm_wakeup_handler,
            LPM_DOMAIN_NONE);
 /*---------------------------------------------------------------------------*/
 static void
@@ -148,7 +148,7 @@ board_init()
   /* Make sure the external flash is in the lower power mode */
 //  ext_flash_init();
 
-  lpm_register_module(&sensortag_module);
+  lpm_register_module(&hestag_module);
 
   /* For unsupported peripherals, select a default pin configuration */
   configure_unused_pins();
